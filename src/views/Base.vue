@@ -1,15 +1,17 @@
 <template>
-    <div class = "home">
+    <div class="base-div">
         <div class = "tool-btn">
-            <div :class = "{'switch-tool':true,'highlight':type}" @click = "switchLayer({type:1,msg:'影像'})">
-                <img src = "../assets/img-c.png" alt = "" width = "100%">
-            </div>
-            <div :class = "{'switch-tool':true,'highlight':!type}" @click = "switchLayer({type:2,msg:'矢量'})">
+            <div :class = "{'switch-tool': true, 'highlight': baseLayerIndex === 0}" 
+                @click = "switchLayer({baseLayerIndex: 0, msg: '矢量'})">
                 <img src = "../assets/vec_c.png" alt = "" width = "100%">
+            </div>
+            <div :class = "{'switch-tool': true, 'highlight': baseLayerIndex === 1}"
+                @click = "switchLayer({baseLayerIndex: 1, msg: '影像'})">
+                <img src = "../assets/img-c.png" alt = "" width = "100%">
             </div>
         </div>
 
-        <div ref = "map" id = "map" style = "width: 100vw;height: 100%;"></div>
+        <div ref="map" id="map" class="map"></div>
         <Footer />
     </div>
 </template>
@@ -18,10 +20,15 @@
 </script>
 
 <style lang = "less">
-    .home {
+    .base-div {
         height: 100vh;
         background: #cccccc;
         position: relative;
+    }
+
+    .map {
+        width: 100vw;
+        height: 100%;
     }
 
     .tool-btn {
@@ -43,17 +50,6 @@
 
         .highlight {
             border-color: #09f;
-        }
-    }
-
-    .menu {
-        position: absolute;
-        left: 0;
-        top: 200px;
-        z-index: 2;
-
-        .el-submenu__title i {
-            color: #10D5F5;
         }
     }
 

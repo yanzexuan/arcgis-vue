@@ -9,9 +9,10 @@ export default {
     },
     data() {
         return {
-            type: false,
+            map: Object, // arcgis Map instance
+            mapView: Object, // arcgis MapView instance
+            baseLayerIndex: 0, // 用于指定当前底图
             gisConstructor: {}, //gis 构造函数
-            gisInstance: {}, // gis 实例
             layerID: {},
             layersInstance: {},
             gisModules: [
@@ -69,7 +70,9 @@ export default {
                     baseLayers: [this.layersInstance.vec_c, this.layersInstance.cva_c]
                 }
             });
-            let view = new this.gisConstructor.MapView({
+            this.baseLayerIndex = 0; // 初始化时，默认打开矢量底图
+
+            let mapView = new this.gisConstructor.MapView({
                 container: container,
                 spatialReference: {
                     wkid: 4326
@@ -77,38 +80,36 @@ export default {
                 map: map,
                 scale: 7000000,
                 center: [111.42610500035, 33.76651600041],
-
             });
 
-            let applicationDiv = document.createElement('div');
-            this.gisInstance.map = map;
-            this.gisInstance.mapView = view;
-            let full = new this.gisConstructor.ScaleBar({
-                view: view,
-                element: applicationDiv
+            this.map = map;
+            this.mapView = mapView;
+
+            // Add scale bar widget
+            let scaleBar = new this.gisConstructor.ScaleBar({
+                view: mapView,
+                element: document.createElement('div')
             });
-
-            view.ui.add(full, 'bottom-right');
-
+            mapView.ui.add(scaleBar, 'bottom-left');
         },
         switchLayer(para) {
+            if (para.baseLayerIndex === 0) {
+                this.map.layers.add(this.layersInstance.vec_c);
+                this.map.layers.add(this.layersInstance.cva_c);
 
-            if(para.type === 1) {
-                this.type = true;
-                this.gisInstance.map.layers.add(this.layersInstance.img_c);
-                this.gisInstance.map.layers.add(this.layersInstance.cia_c);
+                this.map.layers.remove(this.layersInstance.img_c);
+                this.map.layers.remove(this.layersInstance.cia_c);
 
-                this.gisInstance.map.layers.remove(this.layersInstance.vec_c);
-                this.gisInstance.map.layers.remove(this.layersInstance.cva_c);
+            } else if (para.baseLayerIndex === 1){
+                this.map.layers.add(this.layersInstance.img_c);
+                this.map.layers.add(this.layersInstance.cia_c);
 
+                this.map.layers.remove(this.layersInstance.vec_c);
+                this.map.layers.remove(this.layersInstance.cva_c);
             } else {
-                this.type = false;
-                this.gisInstance.map.layers.add(this.layersInstance.vec_c);
-                this.gisInstance.map.layers.add(this.layersInstance.cva_c);
-
-                this.gisInstance.map.layers.remove(this.layersInstance.img_c);
-                this.gisInstance.map.layers.remove(this.layersInstance.cia_c);
+                // console.err('Wrong baseLayerIndex!');
             }
+            this.baseLayerIndex = para.baseLayerIndex;
         },
         initYiledLayer(mapType) {
             let result = this.gisConstructor.WebTileLayer(
@@ -125,7 +126,6 @@ export default {
 
             this.layerID[mapType] = result.id;
             return result;
-
         },
         /*获取扬州市行政区划*/
         textGraphic(para) {
@@ -149,5 +149,4 @@ export default {
             });
         }
     }
-
 };

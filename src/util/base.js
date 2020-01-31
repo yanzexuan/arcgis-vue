@@ -1,8 +1,12 @@
 import { loadCss, loadModules } from 'esri-loader';
 import tileInfo from '../util/tileInfo';
+import Footer from '../components/Footer';
 
 export default {
     name: 'BaseMap',
+    components: {
+        Footer
+    },
     data() {
         return {
             type: false,

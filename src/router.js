@@ -10,11 +10,11 @@ export default new Router({
     base: process.env.BASE_URL,
     routes: [
         {
-            path: '/',
+            path: '/v3', // arcgis js api 3.x
             name: 'home',
             component: Home
         }, {
-            path: '/410',
+            path: '/', // arcgis js api 4.x
             name: 'Base',
             component: Base
         }

@@ -10,10 +10,12 @@
         </div>
 
         <div ref = "map" id = "map" style = "width: 100vw;height: 100%;"></div>
+        <Footer />
     </div>
 </template>
 
-<script src="../util/base.js"></script>
+<script src="../util/base.js">
+</script>
 
 <style lang = "less">
     .home {

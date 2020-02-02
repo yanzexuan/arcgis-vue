@@ -115,7 +115,7 @@ export default {
             let result = this.gisConstructor.WebTileLayer(
                 'http://{subDomain}.tianditu.com/DataServer?T=' + mapType +
                 '&X={col}&Y={row}&L={level}' +
-                '&tk=fa66ded203b504471b9f7ae00c69611f',
+                '&tk=66d02bbbc3baa840bc20af7b4803bd6c',
                 {
                     subDomains: ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7'],
                     tileInfo: tileInfo,

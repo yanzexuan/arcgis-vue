@@ -62,7 +62,7 @@ export default {
                 },
                 getTileUrl(level, row, col) {
                     // eslint-disable-next-line
-                    return `http://t1.tianditu.gov.cn/img_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=img&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX=${level}&TILEROW=${row}&TILECOL=${col}&tk=fa66ded203b504471b9f7ae00c69611f
+                    return `http://t1.tianditu.gov.cn/img_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=img&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX=${level}&TILEROW=${row}&TILECOL=${col}&tk=66d02bbbc3baa840bc20af7b4803bd6c
 `;
                 }
             });

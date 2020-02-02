@@ -21,6 +21,7 @@
 <script>
 import { loadCss, loadModules } from 'esri-loader';
 import Footer from '../components/Footer';
+import Vue from 'vue';
 
 // https://developers.arcgis.com/javascript/latest/api-reference/esri-WebScene.html
 
@@ -58,9 +59,22 @@ export default {
         // ...menuEvent,
         init() {
             // 加载css;
-            loadCss();
+            const arcgisApiBaseUrl = Vue.prototype.ARCGIS_API_BASE_URL;
+            if (arcgisApiBaseUrl) {
+                // Load from local if there is
+                // "http://localhost:8085/arcgis_js_api/library/4.11/esri/css/main.css";
+                loadCss(`${arcgisApiBaseUrl}esri/css/main.css`);
+            } else {
+                loadCss();
+            }
+
             // 加载模块
-            loadModules(this.gisModules).then(this.loadMap);
+            let options = {};
+            if (arcgisApiBaseUrl) {
+                // http://localhost:8085/arcgis_js_api/library/4.11/dojo/dojo.js"
+                options.url = `${arcgisApiBaseUrl}dojo/dojo.js`;
+            }
+            loadModules(this.gisModules, options).then(this.loadMap);
         },
         loadMap(args) {
             /*处理构造函数,绑定到gisConstructor,方便组件内其他地方调用*/

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
-import Base from './views/Base.vue'
+import BaseMap from './views/BaseMap.vue'
 import WebScene from './views/WebScene.vue'
 
 Vue.use(Router)
@@ -16,11 +16,11 @@ export default new Router({
       component: Home
     }, {
       path: '/', // arcgis js api 4.x
-      name: 'Base',
-      component: Base
+      name: 'baseMap',
+      component: BaseMap
     }, {
       path: '/WebScene',
-      name: 'WebScene',
+      name: 'webScene',
       component: WebScene
     }
   ]

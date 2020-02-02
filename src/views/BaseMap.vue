@@ -1,9 +1,29 @@
+<template>
+    <div class="base-div">
+        <div class = "tool-btn">
+            <div :class = "{'switch-tool': true, 'highlight': baseLayerIndex === 0}" 
+                @click = "switchLayer({baseLayerIndex: 0, msg: '矢量'})">
+                <img src = "../assets/vec_c.png" alt = "" width = "100%">
+            </div>
+            <div :class = "{'switch-tool': true, 'highlight': baseLayerIndex === 1}"
+                @click = "switchLayer({baseLayerIndex: 1, msg: '影像'})">
+                <img src = "../assets/img-c.png" alt = "" width = "100%">
+            </div>
+        </div>
+
+        <div ref="map" id="map" class="map"></div>
+        <Footer />
+    </div>
+</template>
+
+<script>
 import { loadCss, loadModules } from 'esri-loader'
 import tileInfo from '../util/tileInfo'
 import Footer from '../components/Footer'
+import Vue from 'vue'
 
 export default {
-  name: 'BaseMap',
+  name: 'baseMap',
   components: {
     Footer
   },
@@ -34,10 +54,23 @@ export default {
   methods: {
     // ...menuEvent,
     init() {
-      // 加载css;
-      loadCss()
+      // 加载css
+      const arcgisApiBaseUrl = Vue.prototype.ARCGIS_API_BASE_URL
+      if (arcgisApiBaseUrl) {
+        // Load from local if there is
+        // "http://localhost:8085/arcgis_js_api/library/4.11/esri/css/main.css"
+        loadCss(`${arcgisApiBaseUrl}esri/css/main.css`)
+      } else {
+        loadCss()
+      }
+
       // 加载模块
-      loadModules(this.gisModules).then(this.loadMap)
+      let options = {}
+      if (arcgisApiBaseUrl) {
+        // http://localhost:8085/arcgis_js_api/library/4.11/dojo/dojo.js"
+        options.url = `${arcgisApiBaseUrl}dojo/dojo.js`
+      }
+      loadModules(this.gisModules, options).then(this.loadMap)
     },
     loadMap(args) {
       // console.log(args);
@@ -112,17 +145,16 @@ export default {
       this.baseLayerIndex = para.baseLayerIndex
     },
     initYiledLayer(mapType) {
-      let result = this.gisConstructor.WebTileLayer(
-        'http://{subDomain}.tianditu.com/DataServer?T=' + mapType +
-                '&X={col}&Y={row}&L={level}' +
-                '&tk=66d02bbbc3baa840bc20af7b4803bd6c',
-        {
-          subDomains: ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7'],
-          tileInfo: tileInfo,
-          spatialReference: {
-            wkid: 4326
-          },
-        })
+      let url = 'http://{subDomain}.tianditu.com/DataServer?T=' + mapType +
+        '&X={col}&Y={row}&L={level}' +
+        '&tk=66d02bbbc3baa840bc20af7b4803bd6c'
+      let result = this.gisConstructor.WebTileLayer(url, {
+        subDomains: ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7'],
+        tileInfo: tileInfo,
+        spatialReference: {
+          wkid: 4326
+        },
+      })
 
       this.layerID[mapType] = result.id
       return result
@@ -149,3 +181,40 @@ export default {
     }
   }
 }
+</script>
+
+<style lang = "less">
+    .base-div {
+        height: 100vh;
+        background: #cccccc;
+        position: relative;
+    }
+
+    .map {
+        width: 100vw;
+        height: 100%;
+    }
+
+    .tool-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 2;
+        display: flex;
+        width: 250px;
+        justify-content: space-between;
+        cursor: pointer;
+
+        .switch-tool {
+            width: 100px;
+            height: 100px;
+            border: 4px solid #fff;
+            border-radius: 4px;
+        }
+
+        .highlight {
+            border-color: #09f;
+        }
+    }
+
+</style>

@@ -19,14 +19,14 @@
 </template>
 
 <script>
-import { loadCss, loadModules } from 'esri-loader';
-import Footer from '../components/Footer';
-import Vue from 'vue';
+import { loadCss, loadModules } from 'esri-loader'
+import Footer from '../components/Footer'
+import Vue from 'vue'
 
 // https://developers.arcgis.com/javascript/latest/api-reference/esri-WebScene.html
 
 export default {
-  name: 'WebScene',
+  name: 'webScene',
   components: {
     Footer
   },

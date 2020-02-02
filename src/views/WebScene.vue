@@ -1,21 +1,21 @@
 <template>
-    <div class="web-scene">
-        <div class = "tool-btn">
-            <div :class = "{'switch-tool': true, 'highlight': baseLayerIndex === 0}" 
-                @click = "switchLayer({baseLayerIndex: 0, msg: '矢量'})">
-                <img src = "../assets/vec_c.png" alt = "" width = "100%">
-            </div>
-            <div :class = "{'switch-tool': true, 'highlight': baseLayerIndex === 1}"
-                @click = "switchLayer({baseLayerIndex: 1, msg: '影像'})">
-                <img src = "../assets/img-c.png" alt = "" width = "100%">
-            </div>
-        </div>
-
-        <div ref="map" id="map" class="map">
-          <div id="titleDiv">Loading...</div>
-        </div>
-        <Footer />
+  <div class="web-scene">
+    <div class = "tool-btn">
+      <div :class = "{'switch-tool': true, 'highlight': baseLayerIndex === 0}" 
+        @click = "switchLayer({baseLayerIndex: 0, msg: '矢量'})">
+        <img src = "../assets/vec_c.png" alt = "" width = "100%">
+      </div>
+      <div :class = "{'switch-tool': true, 'highlight': baseLayerIndex === 1}"
+        @click = "switchLayer({baseLayerIndex: 1, msg: '影像'})">
+        <img src = "../assets/img-c.png" alt = "" width = "100%">
+      </div>
     </div>
+
+    <div ref="map" id="map" class="map">
+      <div id="titleDiv">Loading...</div>
+    </div>
+    <Footer />
+  </div>
 </template>
 
 <script>
@@ -118,57 +118,57 @@ export default {
 </script>
 
 <style lang = "less">
-    .web-scene {
-        height: 100vh;
-        background: #cccccc;
-        position: relative;
+  .web-scene {
+    height: 100vh;
+    background: #cccccc;
+    position: relative;
+  }
+
+  .map {
+    width: 100vw;
+    height: 100%;
+  }
+
+  .tool-btn {
+    position: absolute;
+    top: 40px;
+    right: 20px;
+    display: flex;
+    z-index: 2;
+    display: flex;
+    width: 150px;
+    justify-content: space-between;
+    cursor: pointer;
+
+    .switch-tool {
+      width: 60px;
+      height: 60px;
+      border: 2px solid #fff;
+      border-radius: 3px;
+      opacity: 0.6;
+      &:hover {
+        opacity: 1;
+      }
     }
 
-    .map {
-        width: 100vw;
-        height: 100%;
+    .highlight {
+      border-color: #09f;
     }
+  }
 
-    .tool-btn {
-        position: absolute;
-        top: 40px;
-        right: 20px;
-        display: flex;
-        z-index: 2;
-        display: flex;
-        width: 150px;
-        justify-content: space-between;
-        cursor: pointer;
-
-        .switch-tool {
-            width: 60px;
-            height: 60px;
-            border: 2px solid #fff;
-            border-radius: 3px;
-            opacity: 0.6;
-            &:hover {
-              opacity: 1;
-            }
-        }
-
-        .highlight {
-            border-color: #09f;
-        }
-    }
-
-    #titleDiv{
-        background-color: lightgray;
-        color: black;
-        padding: 3px;
-        position: absolute;
-        z-index: 2;
-        top: 0;
-        right: 0; 
-        font-size: 16pt;
-        font-weight: bolder;
-        width: 100%;
-        height: 25px;
-        text-align: center;
-        opacity: 0.6;
-    }
+  #titleDiv{
+    background-color: lightgray;
+    color: black;
+    padding: 3px;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    right: 0; 
+    font-size: 16pt;
+    font-weight: bolder;
+    width: 100%;
+    height: 25px;
+    text-align: center;
+    opacity: 0.6;
+  }
 </style>

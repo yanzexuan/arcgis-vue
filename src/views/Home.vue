@@ -1,7 +1,7 @@
 <template>
-    <div class = "home">
-        <ArcgisMap/>
-    </div>
+  <div class = "home">
+    <ArcgisMap/>
+  </div>
 </template>
 
 <script>

@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
-import { loadCss, loadModules } from 'esri-loader';
-import tileInfo from './tileInfo';
+import { loadCss, loadModules } from 'esri-loader'
+import tileInfo from './tileInfo'
 
 export default {
   name: 'ArcgisMap',
@@ -20,22 +20,22 @@ export default {
         'esri/graphic',
         'esri/layers/GraphicsLayer',
       ]
-    };
+    }
   },
   mounted() {
-    this.init();
+    this.init()
   },
   methods: {
     init() {
       // 加载css;
       // loadCss('http://arcgis.biubu.cn/v326/esri/css/esri.css');
-      loadCss('3.29');
+      loadCss('3.29')
 
       // 加载模块
       loadModules(this.gisModules, {
         version: '3.29'
       }).then(this.TDTinstance)
-        .then(this.initMap);
+        .then(this.initMap)
     },
     TDTinstance(args) {
       // 这里处理了一下传参，构造函数全部保存到 gisConstructor 对象中，对应的函数
@@ -43,54 +43,54 @@ export default {
       // 注意大小写，3.x 的API感觉有点乱，API文件的开头有大写有小写，注意一定对应起来，
       // 比如 map.js 和 graphic.js 的文件名的开头就是小写的，
       for (let k in args) {
-        let name = this.gisModules[k].split('/').pop();
-        this.gisConstructor[name] = args[k];
+        let name = this.gisModules[k].split('/').pop()
+        this.gisConstructor[name] = args[k]
       }
 
-      let that = this;
+      let that = this
       dojo.declare('TDT', this.gisConstructor.TiledMapServiceLayer, {
 
         constructor(maptype) {
-          this._maptype = maptype;
-          this.spatialReference = new that.gisConstructor.SpatialReference({wkid: 4326});
+          this._maptype = maptype
+          this.spatialReference = new that.gisConstructor.SpatialReference({wkid: 4326})
           this.initialExtent = (this.fullExtent = new that.gisConstructor.Extent(-180, -90, 180, 90,
-            this.spatialReference));
+            this.spatialReference))
 
-          this.tileInfo = new that.gisConstructor.TileInfo(tileInfo);
-          this.loaded = true;
-          this.onLoad(this);
+          this.tileInfo = new that.gisConstructor.TileInfo(tileInfo)
+          this.loaded = true
+          this.onLoad(this)
         },
         getTileUrl(level, row, col) {
           // eslint-disable-next-line
                     return `http://t1.tianditu.gov.cn/img_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=img&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX=${level}&TILEROW=${row}&TILECOL=${col}&tk=66d02bbbc3baa840bc20af7b4803bd6c
-`;
+`
         }
-      });
+      })
     },
     initMap() {
-      let map = new this.gisConstructor.map('map', {logo: false});// 创建地图实例
-      this.gisInst.map = map;// 绑定到组件，方便操作
+      let map = new this.gisConstructor.map('map', {logo: false})// 创建地图实例
+      this.gisInst.map = map// 绑定到组件，方便操作
 
-      let pt = new this.gisConstructor.Point(85, -29); // 设置中心点
-      map.centerAndZoom(pt, 5); // 设置中心点和缩放级别;
+      let pt = new this.gisConstructor.Point(85, -29) // 设置中心点
+      map.centerAndZoom(pt, 5) // 设置中心点和缩放级别;
 
-      let img = new TDT('img'); // 影像
-      let cia = new TDT('cia');//路网
+      let img = new TDT('img') // 影像
+      let cia = new TDT('cia')//路网
 
-      map.addLayer(img); // 将图层添加到map对象
-      map.addLayer(cia);
+      map.addLayer(img) // 将图层添加到map对象
+      map.addLayer(cia)
 
-      this.createCircle();
+      this.createCircle()
     },
     createCircle() {
-      let symbol = new this.gisConstructor.SimpleFillSymbol().setColor(null).outline.setColor('#ff0');
-      let gl = new this.gisConstructor.GraphicsLayer({id: 'circles'});
+      let symbol = new this.gisConstructor.SimpleFillSymbol().setColor(null).outline.setColor('#ff0')
+      let gl = new this.gisConstructor.GraphicsLayer({id: 'circles'})
 
-      this.gisInst.map.addLayer(gl);
+      this.gisInst.map.addLayer(gl)
 
       for (let i = 0; i < 50; i++) {
-        let randomx = Math.random();
-        let randomy = Math.random();
+        let randomx = Math.random()
+        let randomy = Math.random()
 
         let extent = new this.gisConstructor.Extent({
           'xmin': 105 * (randomx + 0.5),
@@ -98,11 +98,11 @@ export default {
           'xmax': 105.1 * (randomx + 0.5),
           'ymax': -29.2 * (randomy + 0.0000000005),
           'spatialReference': {'wkid': 4326}
-        });
+        })
 
-        let graphic = new this.gisConstructor.graphic(extent, symbol);
-        gl.add(graphic);
+        let graphic = new this.gisConstructor.graphic(extent, symbol)
+        gl.add(graphic)
       }
     }
   }
-};
+}

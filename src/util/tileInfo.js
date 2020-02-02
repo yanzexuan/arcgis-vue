@@ -86,4 +86,4 @@ export default {
       resolution: 5.3644180297851563e-006,
       scale: 2254.4677204799655
     }]
-};
+}

@@ -2,13 +2,13 @@
  * Created by WJQ on 2018/8/30 14:42.
  */
 // import qs from 'qs';
-import axios from 'axios';
+import axios from 'axios'
 
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'; // 请求头设置
-axios.defaults.timeout = 300000; // 超时设置
+axios.defaults.timeout = 300000 // 超时设置
 
-let baseUrl = 'http://localhost:9090/api';
-axios.defaults.baseURL = baseUrl;
+let baseUrl = 'http://localhost:9090/api'
+axios.defaults.baseURL = baseUrl
 
 // 请求发出前的处理
 // axios.interceptors.request.use ((config) => {
@@ -24,22 +24,22 @@ axios.defaults.baseURL = baseUrl;
 // 返回状态判断
 axios.interceptors.response.use((res) => {
   if(!res.data) {
-    return Promise.reject(res);
+    return Promise.reject(res)
   }
 
-  return res;
+  return res
 }, (error) => {
-  return Promise.reject(error);
-});
+  return Promise.reject(error)
+})
 
 export const fetch = (url, params = {}) => {
   return new Promise((resolve, reject) => {
     axios.post(url, params).then(response => {
-      resolve(response.data);
+      resolve(response.data)
     }, err => {
-      reject(err);
+      reject(err)
     }).catch((error) => {
-      reject(error);
-    });
-  });
-};
+      reject(error)
+    })
+  })
+}

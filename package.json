@@ -44,18 +44,7 @@
       ],
       "semi": [
         "error",
-        "always"
-      ],
-      "semi-style": [
-        "error",
-        "last"
-      ],
-      "semi-spacing": [
-        "error",
-        {
-          "before": false,
-          "after": true
-        }
+        "never"
       ],
       "no-dupe-keys": "error",
       "no-eval": "error",

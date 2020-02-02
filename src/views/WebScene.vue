@@ -26,94 +26,94 @@ import Vue from 'vue';
 // https://developers.arcgis.com/javascript/latest/api-reference/esri-WebScene.html
 
 export default {
-    name: 'WebScene',
-    components: {
-        Footer
-    },
-    data() {
-        return {
-            webScene: Object, // arcgis webScene instance
-            sceneView: Object, // arcgis SceneView instance
-            baseLayerIndex: 0, // 用于指定当前底图
-            gisConstructor: {}, //gis 构造函数
-            gisModules: [
-                "esri/views/SceneView",
-                "esri/WebScene",
-                // 'esri/Map',
-                // 'esri/views/MapView',
-                'esri/layers/WebTileLayer',
-                'esri/layers/support/TileInfo',
-                'esri/config',
-                'esri/geometry/Point',
-                'esri/Graphic',
-                'esri/widgets/ScaleBar',
-                "dojo/dom",
-                "dojo/domReady"
-            ]
-        };
-    },
-    mounted() {
-        this.init();
-    },
-    methods: {
-        // ...menuEvent,
-        init() {
-            // 加载css;
-            const arcgisApiBaseUrl = Vue.prototype.ARCGIS_API_BASE_URL;
-            if (arcgisApiBaseUrl) {
-                // Load from local if there is
-                // "http://localhost:8085/arcgis_js_api/library/4.11/esri/css/main.css";
-                loadCss(`${arcgisApiBaseUrl}esri/css/main.css`);
-            } else {
-                loadCss();
-            }
+  name: 'WebScene',
+  components: {
+    Footer
+  },
+  data() {
+    return {
+      webScene: Object, // arcgis webScene instance
+      sceneView: Object, // arcgis SceneView instance
+      baseLayerIndex: 0, // 用于指定当前底图
+      gisConstructor: {}, //gis 构造函数
+      gisModules: [
+        "esri/views/SceneView",
+        "esri/WebScene",
+        // 'esri/Map',
+        // 'esri/views/MapView',
+        'esri/layers/WebTileLayer',
+        'esri/layers/support/TileInfo',
+        'esri/config',
+        'esri/geometry/Point',
+        'esri/Graphic',
+        'esri/widgets/ScaleBar',
+        "dojo/dom",
+        "dojo/domReady"
+      ]
+    };
+  },
+  mounted() {
+    this.init();
+  },
+  methods: {
+    // ...menuEvent,
+    init() {
+      // 加载css;
+      const arcgisApiBaseUrl = Vue.prototype.ARCGIS_API_BASE_URL;
+      if (arcgisApiBaseUrl) {
+        // Load from local if there is
+        // "http://localhost:8085/arcgis_js_api/library/4.11/esri/css/main.css";
+        loadCss(`${arcgisApiBaseUrl}esri/css/main.css`);
+      } else {
+        loadCss();
+      }
 
-            // 加载模块
-            let options = {};
-            if (arcgisApiBaseUrl) {
-                // http://localhost:8085/arcgis_js_api/library/4.11/dojo/dojo.js"
-                options.url = `${arcgisApiBaseUrl}dojo/dojo.js`;
-            }
-            loadModules(this.gisModules, options).then(this.loadMap);
-        },
-        loadMap(args) {
-            /*处理构造函数,绑定到gisConstructor,方便组件内其他地方调用*/
-            for (let k in args) {
-                let name = this.gisModules[k].split('/').pop();
-                this.gisConstructor[name] = args[k];
-            }
-            // 初始化地图 
-            let webScene = new this.gisConstructor.WebScene({
-                portalItem: {
-                    id: "3a9976baef9240ab8645ee25c7e9c096"
-                }
-            });
-            let sceneView = new this.gisConstructor.SceneView({
-                container: "map",
-                map: webScene,
-                padding: {
-                    top: 40
-                }
-            });
-            let titleDiv = this.gisConstructor.dom.byId("titleDiv");
-            webScene.when(function() {
-                // All layers and the basemap have been created
-                titleDiv.innerHTML = "Layers and basemap have been created...";
-            });
-            sceneView.when(function() {
-                // All layer and basemap resources have been loaded and are ready to be displayed
-                let title = webScene.portalItem.title;
-                titleDiv.innerHTML = title;
-            });
-
-            this.webScene = webScene;
-            this.sceneView = sceneView;
-        },
-        switchLayer(para) {
-            // TODO
-            this.baseLayerIndex = para.baseLayerIndex;
+      // 加载模块
+      let options = {};
+      if (arcgisApiBaseUrl) {
+        // http://localhost:8085/arcgis_js_api/library/4.11/dojo/dojo.js"
+        options.url = `${arcgisApiBaseUrl}dojo/dojo.js`;
+      }
+      loadModules(this.gisModules, options).then(this.loadMap);
+    },
+    loadMap(args) {
+      /*处理构造函数,绑定到gisConstructor,方便组件内其他地方调用*/
+      for (let k in args) {
+        let name = this.gisModules[k].split('/').pop();
+        this.gisConstructor[name] = args[k];
+      }
+      // 初始化地图 
+      let webScene = new this.gisConstructor.WebScene({
+        portalItem: {
+          id: "3a9976baef9240ab8645ee25c7e9c096"
         }
+      });
+      let sceneView = new this.gisConstructor.SceneView({
+        container: "map",
+        map: webScene,
+        padding: {
+          top: 40
+        }
+      });
+      let titleDiv = this.gisConstructor.dom.byId("titleDiv");
+      webScene.when(function() {
+        // All layers and the basemap have been created
+        titleDiv.innerHTML = "Layers and basemap have been created...";
+      });
+      sceneView.when(function() {
+        // All layer and basemap resources have been loaded and are ready to be displayed
+        let title = webScene.portalItem.title;
+        titleDiv.innerHTML = title;
+      });
+
+      this.webScene = webScene;
+      this.sceneView = sceneView;
+    },
+    switchLayer(para) {
+      // TODO
+      this.baseLayerIndex = para.baseLayerIndex;
     }
+  }
 };
 </script>
 

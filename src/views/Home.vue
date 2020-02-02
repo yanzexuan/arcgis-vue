@@ -9,9 +9,9 @@
 import ArcgisMap from '@/components/ArcgisMap.vue';
 
 export default {
-    name: 'home',
-    components: {
-        ArcgisMap
-    }
+  name: 'home',
+  components: {
+    ArcgisMap
+  }
 };
 </script>

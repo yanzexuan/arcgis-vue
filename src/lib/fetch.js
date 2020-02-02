@@ -23,23 +23,23 @@ axios.defaults.baseURL = baseUrl;
 
 // 返回状态判断
 axios.interceptors.response.use((res) => {
-    if(!res.data) {
-        return Promise.reject(res);
-    }
+  if(!res.data) {
+    return Promise.reject(res);
+  }
 
-    return res;
+  return res;
 }, (error) => {
-    return Promise.reject(error);
+  return Promise.reject(error);
 });
 
 export const fetch = (url, params = {}) => {
-    return new Promise((resolve, reject) => {
-        axios.post(url, params).then(response => {
-            resolve(response.data);
-        }, err => {
-            reject(err);
-        }).catch((error) => {
-            reject(error);
-        });
+  return new Promise((resolve, reject) => {
+    axios.post(url, params).then(response => {
+      resolve(response.data);
+    }, err => {
+      reject(err);
+    }).catch((error) => {
+      reject(error);
     });
+  });
 };

@@ -52,6 +52,7 @@ export default {
         'esri/geometry/Point',
         'esri/Graphic',
         "esri/layers/FeatureLayer",
+        "esri/layers/GraphicsLayer",
         "esri/layers/MapImageLayer",
         'esri/layers/support/TileInfo',
         'esri/layers/SceneLayer',
@@ -95,39 +96,53 @@ export default {
     initLayers() {
       this.layers = [
         {
-          id: 0,
-          name: "SceneLayer 1",
+          id: "0",
+          name: "SceneLayer (Streetnetwork)",
           checked: false,
           type: "SceneLayer",
           url: "http://gis.cloud.com/arcgis/rest/services/Hosted/Streetnetwork_ProcedurallyGeneratedMultipatches/SceneServer"
         },
         {
-          id: 1,
-          name: "SceneLayer 2",
+          id: "1",
+          name: "SceneLayer (Building_Hamburg)",
           checked: false,
           type: "SceneLayer",
+          url: "http://scene.arcgis.com/arcgis/rest/services/Hosted/Building_Hamburg/SceneServer/layers/0"
+        },
+        {
+          id: "2",
+          name: "MapImageLayer (Buildings_4326)",
+          checked: false,
+          type: "MapImageLayer",
           url: "https://gis.cloud.com/arcgis/rest/services/Buildings_4326/MapServer"
         },
         {
-          id: 2,
+          id: "3",
           name: "Trailheads point feature layer",
           checked: false,
           type: "FeatureLayer",
           url: "https://services3.arcgis.com/GVgbJbqm8hXASVYi/arcgis/rest/services/Trailheads/FeatureServer/0"
         },
         {
-          id: 3,
+          id: "4",
           name: "Trails feature layer (lines)",
           checked: false,
           type: "FeatureLayer",
           url: "https://services3.arcgis.com/GVgbJbqm8hXASVYi/arcgis/rest/services/Trails/FeatureServer/0"
         },
         {
-          id: 4,
+          id: "5",
           name: "Parks and open spaces (polygons)",
           checked: false,
           type: "FeatureLayer",
           url: "https://services3.arcgis.com/GVgbJbqm8hXASVYi/arcgis/rest/services/Parks_and_Open_Space/FeatureServer/0"
+        },
+        {
+          id: "6",
+          name: "GraphicsLayer",
+          checked: false,
+          type: "GraphicsLayer",
+          url: ""
         }
       ]
     },
@@ -142,16 +157,16 @@ export default {
       this.initGisConstructors(args)
 
       // 初始化地图 
+      // const portalItemId = "3a9976baef9240ab8645ee25c7e9c096"
+      const portalItemId = "affa021c51944b5694132b2d61fe1057" // from arcgis example
       let webScene = new this.gisConstructor.WebScene({
-        portalItem: {
-          id: "3a9976baef9240ab8645ee25c7e9c096"
-        }
+        portalItem: { id: portalItemId }
       })
       let sceneView = new this.gisConstructor.SceneView({
         container: "map",
         map: webScene,
-        scale: 20000000,
-        center: [104, 35],
+        // scale: 20000000,
+        // center: [104, 35],
         padding: {
           top: 40
         }
@@ -184,15 +199,24 @@ export default {
       }
 
       if (checked) {
+        let newLayer = null
         if (layer.type === "SceneLayer") {
-          let l = new this.gisConstructor.SceneLayer({ url: layer.url })
-          this.webScene.add(l)
+          newLayer = new this.gisConstructor.SceneLayer({ url: layer.url })
+        } else if (layer.type === "MapImageLayer") {
+          // 注意在全球场景中支持WGS84坐标系和Web墨卡托坐标系，WGS84对应的代号是4326
+          newLayer = new this.gisConstructor.MapImageLayer({ url: layer.url })
         } else if (layer.type === "FeatureLayer") {
-          let l = new this.gisConstructor.FeatureLayer({ url: layer.url })
-          // TODO: How to add a FeatureLayer to WebScene, rather than Map?
-          this.webScene.add(l)
+          newLayer = new this.gisConstructor.FeatureLayer({ url: layer.url })
+          // TODO: How to add a FeatureLayer to WebScene, rather than to Map?
+        } else if (layer.type === "GraphicsLayer") {
+          // 在scene上构建Graphic层
+          newLayer = new this.gisConstructor.GraphicsLayer()
         } else {
           console.err(`Layer type for ${layer.type} is not supported yet!`)
+          return
+        }
+        if (newLayer) {
+          this.webScene.add(newLayer)
         }
       } else {
         // TODO: turn off a layer

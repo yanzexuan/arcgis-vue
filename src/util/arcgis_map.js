@@ -33,7 +33,9 @@ export default {
       loadCss('3.29')
 
       // 加载模块
-      const options = { version: '3.31', css: true }
+      const options = { version: '3.29', css: true }
+      // the .then method cannot call in to TDTinstance, 
+      // probably is because it is loading from online rather than from local!
       loadModules(this.gisModules, options).then(this.TDTinstance).then(this.initMap)
     },
     TDTinstance(args) {

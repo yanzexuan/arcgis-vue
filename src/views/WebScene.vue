@@ -156,7 +156,7 @@ export default {
     }
   }
 
-  #titleDiv{
+  #titleDiv {
     background-color: lightgray;
     color: black;
     padding: 3px;

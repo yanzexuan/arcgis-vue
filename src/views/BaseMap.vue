@@ -97,7 +97,7 @@ export default {
       /*初始化地图*/
       let map = new this.gisConstructor.Map({
         spatialReference: {
-          wkid: 4326
+          wkid: 4326 // 3857 doesn't work, why?
         },
         basemap: {
           baseLayers: [this.layersInstance.vec_c, this.layersInstance.cva_c]
@@ -111,8 +111,8 @@ export default {
           wkid: 4326
         },
         map: map,
-        scale: 7000000,
-        center: [111.42610500035, 33.76651600041],
+        scale: 10000000,
+        center: [104, 35],
       })
 
       this.map = map

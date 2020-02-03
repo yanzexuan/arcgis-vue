@@ -3,10 +3,10 @@ import App from './App.vue'
 import axios from 'axios'
 import router from './router'
 import store from './store'
-// import elementUI from 'element-ui';
-// Vue.use(elementUI);
+import elementUI from 'element-ui'
+Vue.use(elementUI)
 
-async function startApp () {
+async function startApp() {
   let baseURL = process.env.BASE_URL
   const configFile = `config/config.json`
   console.log(`Loading config: ${configFile}`)

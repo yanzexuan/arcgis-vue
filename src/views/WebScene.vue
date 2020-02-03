@@ -14,6 +14,15 @@
     <div ref="map" id="map" class="map">
       <div id="titleDiv">Loading...</div>
     </div>
+
+    <el-card class="layer-manager">
+      <el-checkbox v-for="l in layers" :label="l.name" :key="l.id"
+        v-model="l.checked"
+        class="layer-item"
+        @change="toggleLayer(l.id, $event)">
+        {{l.name}}
+      </el-checkbox>
+    </el-card>
     <Footer />
   </div>
 </template>
@@ -37,19 +46,24 @@ export default {
       baseLayerIndex: 0, // 用于指定当前底图
       gisConstructor: {}, //gis 构造函数
       gisModules: [
-        "esri/views/SceneView",
-        "esri/WebScene",
-        // 'esri/Map',
-        // 'esri/views/MapView',
-        'esri/layers/WebTileLayer',
-        'esri/layers/support/TileInfo',
         'esri/config',
+        "dojo/dom",
+        "dojo/domReady!",
         'esri/geometry/Point',
         'esri/Graphic',
+        "esri/layers/FeatureLayer",
+        "esri/layers/MapImageLayer",
+        'esri/layers/support/TileInfo',
+        'esri/layers/SceneLayer',
+        'esri/layers/WebTileLayer',
+        'esri/Map',
+        // 'esri/views/MapView',
+        "esri/views/SceneView",
+        "esri/widgets/LayerList",
         'esri/widgets/ScaleBar',
-        "dojo/dom",
-        "dojo/domReady"
-      ]
+        "esri/WebScene",
+      ],
+      layers: []
     }
   },
   mounted() {
@@ -74,14 +88,59 @@ export default {
         // http://localhost:8085/arcgis_js_api/library/4.11/dojo/dojo.js"
         options.url = `${arcgisApiBaseUrl}dojo/dojo.js`
       }
-      loadModules(this.gisModules, options).then(this.loadMap)
+      loadModules(this.gisModules, options).then(this.loadWebScene)
+
+      this.initLayers()
     },
-    loadMap(args) {
+    initLayers() {
+      this.layers = [
+        {
+          id: 0,
+          name: "SceneLayer 1",
+          checked: false,
+          type: "SceneLayer",
+          url: "http://gis.cloud.com/arcgis/rest/services/Hosted/Streetnetwork_ProcedurallyGeneratedMultipatches/SceneServer"
+        },
+        {
+          id: 1,
+          name: "SceneLayer 2",
+          checked: false,
+          type: "SceneLayer",
+          url: "https://gis.cloud.com/arcgis/rest/services/Buildings_4326/MapServer"
+        },
+        {
+          id: 2,
+          name: "Trailheads point feature layer",
+          checked: false,
+          type: "FeatureLayer",
+          url: "https://services3.arcgis.com/GVgbJbqm8hXASVYi/arcgis/rest/services/Trailheads/FeatureServer/0"
+        },
+        {
+          id: 3,
+          name: "Trails feature layer (lines)",
+          checked: false,
+          type: "FeatureLayer",
+          url: "https://services3.arcgis.com/GVgbJbqm8hXASVYi/arcgis/rest/services/Trails/FeatureServer/0"
+        },
+        {
+          id: 4,
+          name: "Parks and open spaces (polygons)",
+          checked: false,
+          type: "FeatureLayer",
+          url: "https://services3.arcgis.com/GVgbJbqm8hXASVYi/arcgis/rest/services/Parks_and_Open_Space/FeatureServer/0"
+        }
+      ]
+    },
+    initGisConstructors(args) {
       /*处理构造函数,绑定到gisConstructor,方便组件内其他地方调用*/
       for (let k in args) {
         let name = this.gisModules[k].split('/').pop()
         this.gisConstructor[name] = args[k]
       }
+    },
+    loadWebScene(args) {
+      this.initGisConstructors(args)
+
       // 初始化地图 
       let webScene = new this.gisConstructor.WebScene({
         portalItem: {
@@ -91,6 +150,8 @@ export default {
       let sceneView = new this.gisConstructor.SceneView({
         container: "map",
         map: webScene,
+        scale: 20000000,
+        center: [104, 35],
         padding: {
           top: 40
         }
@@ -112,6 +173,30 @@ export default {
     switchLayer(para) {
       // TODO
       this.baseLayerIndex = para.baseLayerIndex
+    },
+    toggleLayer(layerId, checked) {
+      let layer = null
+      for (let i = 0; i < this.layers.length; ++i) {
+        if (layerId === this.layers[i].id) {
+          layer = this.layers[i]
+          break
+        }
+      }
+
+      if (checked) {
+        if (layer.type === "SceneLayer") {
+          let l = new this.gisConstructor.SceneLayer({ url: layer.url })
+          this.webScene.add(l)
+        } else if (layer.type === "FeatureLayer") {
+          let l = new this.gisConstructor.FeatureLayer({ url: layer.url })
+          // TODO: How to add a FeatureLayer to WebScene, rather than Map?
+          this.webScene.add(l)
+        } else {
+          console.err(`Layer type for ${layer.type} is not supported yet!`)
+        }
+      } else {
+        // TODO: turn off a layer
+      }
     }
   }
 }
@@ -135,7 +220,6 @@ export default {
     right: 20px;
     display: flex;
     z-index: 2;
-    display: flex;
     width: 150px;
     justify-content: space-between;
     cursor: pointer;
@@ -170,5 +254,22 @@ export default {
     height: 25px;
     text-align: center;
     opacity: 0.6;
+  }
+
+  .layer-manager {
+    position: absolute;
+    top: 120px;
+    right: 20px;
+    display: flex;
+    background: white;
+    padding: 3px;
+    opacity: 0.6;
+    &:hover {
+      opacity: 1;
+    }
+    .layer-item {
+      display: block;
+      margin: 3px;
+    }
   }
 </style>

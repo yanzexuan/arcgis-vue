@@ -20,6 +20,7 @@
     "@vue/cli-plugin-eslint": "^3.11.0",
     "@vue/cli-service": "^3.11.0",
     "eslint-plugin-html": "^6.0.0",
+    "eslint-plugin-vuefix": "^0.2.1",
     "js-yaml": "^3.13.1",
     "less": "^3.10.3",
     "less-loader": "^4.1.0",
@@ -53,13 +54,13 @@
       "max-len": [
         "error",
         {
-          "code": 120
+          "code": 200
         }
       ],
       "max-lines": [
         "error",
         {
-          "max": 200,
+          "max": 2000,
           "skipBlankLines": true,
           "skipComments": true
         }

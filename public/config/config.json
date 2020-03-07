@@ -1,5 +1,5 @@
 {
-  "arcgisApiBaseUrl": "http://localhost:8085/arcgis_js_api/library/4.11/",
+  "arcgisApiBaseUrl": "http://localhost:8088/arcgis_js_api/library/4.11/",
   "tiandituToken": "66d02bbbc3baa840bc20af7b4803bd6c",
   "debug": {
     "showFps": true

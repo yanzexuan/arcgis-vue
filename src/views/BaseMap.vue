@@ -58,7 +58,7 @@ export default {
       const arcgisApiBaseUrl = Vue.prototype.ARCGIS_API_BASE_URL
       if (arcgisApiBaseUrl) {
         // Load from local if there is
-        // "http://localhost:8085/arcgis_js_api/library/4.11/esri/css/main.css"
+        // "http://localhost:8088/arcgis_js_api/library/4.11/esri/css/main.css"
         loadCss(`${arcgisApiBaseUrl}esri/css/main.css`)
       } else {
         loadCss()
@@ -67,7 +67,7 @@ export default {
       // 加载模块
       let options = {}
       if (arcgisApiBaseUrl) {
-        // http://localhost:8085/arcgis_js_api/library/4.11/dojo/dojo.js"
+        // http://localhost:8088/arcgis_js_api/library/4.11/dojo/dojo.js"
         options.url = `${arcgisApiBaseUrl}dojo/dojo.js`
       }
       loadModules(this.gisModules, options).then(this.loadMap)
